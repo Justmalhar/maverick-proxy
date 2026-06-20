@@ -21,7 +21,7 @@ export async function POST(req: Request): Promise<Response> {
       { role: 'system', content: 'Summarize the conversation so far in 2–4 sentences, capturing key facts, decisions, and the user’s goals. Write it as neutral context for continuing the chat. Reply with only the summary.' },
       ...recent(body.messages, 20),
     ];
-    const summary = await complete(up, prompt, 220);
+    const summary = await complete(up, prompt, 260, { disableReasoning: true });
     return Response.json({ summary });
   } catch {
     return json(502, 'Summary generation failed');

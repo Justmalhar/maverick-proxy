@@ -18,11 +18,16 @@ export async function POST(req: Request): Promise<Response> {
 
   try {
     const prompt: ChatMsg[] = [
-      { role: 'system', content: 'Write a very short chat title: 3–6 words, Title Case, no quotes or punctuation. Reply with only the title.' },
+      { role: 'system', content: 'You generate chat titles. Output ONLY the title — 3 to 6 words, Title Case, no quotes, no punctuation, no preamble, no explanation. Base it on the user\'s first request.' },
       ...recent(body.messages, 4),
+      { role: 'user', content: 'Title:' },
     ];
-    let title = await complete(up, prompt, 24);
-    title = title.replace(/^["'#\s]+|["'\s]+$/g, '').slice(0, 60);
+    let title = await complete(up, prompt, 64, { disableReasoning: true });
+    // Take the last non-empty line and strip wrapping quotes/markup/labels.
+    title = (title.split('\n').map((l) => l.trim()).filter(Boolean).pop() ?? '')
+      .replace(/^(title|chat title)\s*[:\-]\s*/i, '')
+      .replace(/^["'#*\s]+|["'*\s]+$/g, '')
+      .slice(0, 60);
     return Response.json({ title });
   } catch {
     return json(502, 'Title generation failed');
