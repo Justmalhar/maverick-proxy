@@ -5,9 +5,13 @@ let _client: SupabaseClient | null = null;
 /** Server-side Supabase client. */
 export function supa(): SupabaseClient {
   if (_client) return _client;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !key) throw new Error('Supabase env not configured');
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL;
+  // MUST be the secret / service-role key — it bypasses Row-Level Security.
+  // The publishable/anon key is blocked by RLS and will fail every query.
+  const key = process.env.SUPABASE_SECRET_KEY
+    ?? process.env.SUPABASE_SERVICE_ROLE_KEY
+    ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  if (!url || !key) throw new Error('Supabase env not configured (need SUPABASE_URL + SUPABASE_SECRET_KEY)');
   _client = createClient(url, key, { auth: { persistSession: false } });
   return _client;
 }
