@@ -17,6 +17,11 @@ STT / TTS providers. Provider keys live here, never in the app.
 | GET  | `/api/catalog` | access token | Full catalog: providers + LLM/STT/TTS/image/video |
 | POST | `/api/audio/transcriptions` | access token | Raw audio → configured STT → `{text}` |
 | POST | `/api/audio/speech` | access token | `{input,voice}` → configured TTS → mp3 |
+| POST | `/api/agent` | access token | Agentic loop (Vercel AI SDK `ToolLoopAgent`) with all tools, streamed |
+| POST | `/api/generate/image` | access token | `{prompt,model?}` → `{text, media[]}` |
+| POST | `/api/generate/video` | access token | `{prompt,model?}` → `{text, media[]}` |
+| POST | `/api/generate/song` | access token | `{prompt,model?}` → `{text, media[]}` |
+| POST | `/api/research` | access token | `{query}` → `{report}` (OpenRouter web search) |
 
 All gated routes also run App Attest when `APP_ATTEST_REQUIRED=true` (see Phase 1b).
 
