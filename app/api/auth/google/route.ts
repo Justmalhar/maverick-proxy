@@ -1,26 +1,25 @@
-import { verifyAppleIdentityToken } from '../../../../lib/appleAuth';
+import { verifyGoogleIdToken } from '../../../../lib/googleAuth';
 import { upsertProfile } from '../../../../lib/supabase';
 import { mintSession } from '../../../../lib/jwt';
 import { json } from '../../../../lib/guard';
 
 export const runtime = 'nodejs';
 
-// POST { identityToken, fullName? } → { accessToken, refreshToken, expiresIn, user }
+// POST { idToken, fullName? } → { accessToken, refreshToken, expiresIn, user }
 export async function POST(req: Request): Promise<Response> {
-  let body: { identityToken?: string; fullName?: string };
+  let body: { idToken?: string; fullName?: string };
   try { body = await req.json(); } catch { return json(400, 'Invalid JSON'); }
 
-  const idToken = body.identityToken;
-  if (!idToken) return json(400, 'Missing identityToken');
+  if (!body.idToken) return json(400, 'Missing idToken');
 
   let claims;
   try {
-    claims = await verifyAppleIdentityToken(idToken);
+    claims = await verifyGoogleIdToken(body.idToken);
   } catch {
-    return json(401, 'Could not verify Apple token');
+    return json(401, 'Could not verify Google token');
   }
 
-  const profile = await upsertProfile(`apple:${claims.sub}`, claims.email, body.fullName);
+  const profile = await upsertProfile(`google:${claims.sub}`, claims.email, claims.name ?? body.fullName);
   const session = await mintSession(profile.id);
 
   return Response.json({

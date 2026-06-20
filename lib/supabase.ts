@@ -24,13 +24,17 @@ export interface Profile {
   tier: string;
 }
 
-/** Upserts a profile for an Apple subject and returns it. */
-export async function upsertProfile(appleSub: string, email?: string | null, name?: string | null): Promise<Profile> {
+/**
+ * Upserts a profile by external identity and returns it. `externalId` is the
+ * provider-namespaced subject, e.g. "apple:<sub>" or "google:<sub>" (stored in
+ * the `apple_sub` column, which serves as the generic external id).
+ */
+export async function upsertProfile(externalId: string, email?: string | null, name?: string | null): Promise<Profile> {
   const db = supa();
   const { data, error } = await db
     .from('profiles')
     .upsert(
-      { apple_sub: appleSub, email: email ?? null, display_name: name ?? null, updated_at: new Date().toISOString() },
+      { apple_sub: externalId, email: email ?? null, display_name: name ?? null, updated_at: new Date().toISOString() },
       { onConflict: 'apple_sub' }
     )
     .select('id, apple_sub, email, display_name, tier')
