@@ -1,18 +1,22 @@
 import { ImageModel } from './types';
 
-// Curated image-generation models. (Routes are a future phase; these power the
-// UI today so we can show what's coming and gate by tier.)
+// Image generation / editing (real models hidden behind friendly tiers).
 export const IMAGE_MODELS: ImageModel[] = [
   {
-    id: 'gpt-image-1', label: 'GPT Image', provider: 'openai',
-    description: 'High-quality image generation and editing.', tier: 'pro', badge: 'New',
-    sizes: ['1024x1024', '1024x1536', '1536x1024'], supportsEdit: true,
+    key: 'image-fast', id: 'google/gemini-3.1-flash-image', label: 'Fast', provider: 'openrouter',
+    description: 'Quick image generation and editing.', tier: 'free',
+    supportsEdit: true,
   },
   {
-    id: 'black-forest-labs/flux-1.1-pro', label: 'FLUX 1.1 Pro', provider: 'replicate',
-    description: 'Fast, photorealistic generations.', tier: 'pro',
-    sizes: ['1024x1024', '1344x768', '768x1344'],
+    key: 'image-quality', id: 'x-ai/grok-imagine-image-quality', label: 'Quality', provider: 'openrouter',
+    description: 'Richer, more detailed images.', tier: 'pro',
+    supportsEdit: true,
+  },
+  {
+    key: 'image-pro', id: 'openai/gpt-5.4-image-2', label: 'Pro', provider: 'openrouter',
+    description: 'Highest-fidelity generation and editing.', tier: 'pro', badge: 'Pro',
+    supportsEdit: true,
   },
 ];
 
-export const DEFAULT_IMAGE_ID = 'gpt-image-1';
+export const DEFAULT_IMAGE_KEY = 'image-fast';

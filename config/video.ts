@@ -1,18 +1,17 @@
 import { VideoModel } from './types';
 
-// Curated video-generation models. (Routes are a future phase; configs power
-// the UI and tier gating now.)
+// Video generation (real models hidden behind friendly tiers).
 export const VIDEO_MODELS: VideoModel[] = [
   {
-    id: 'minimax/video-01', label: 'MiniMax Video', provider: 'replicate',
-    description: 'Text-to-video generation.', tier: 'pro', badge: 'New',
-    durationsSec: [6], aspectRatios: ['16:9', '9:16', '1:1'],
+    key: 'video-fast', id: 'bytedance/seedance-2.0-fast', label: 'Fast', provider: 'openrouter',
+    description: 'Faster, lower-cost video.', tier: 'pro',
+    durationsSec: [5], aspectRatios: ['16:9', '9:16'],
   },
   {
-    id: 'sora-2', label: 'Sora', provider: 'openai',
-    description: 'Coming soon.', tier: 'pro', enabled: false,
-    durationsSec: [5, 10], aspectRatios: ['16:9', '9:16'],
+    key: 'video-pro', id: 'bytedance/seedance-2.0', label: 'Pro', provider: 'openrouter',
+    description: 'Highest-quality text-to-video.', tier: 'pro', badge: 'Pro',
+    durationsSec: [5, 10], aspectRatios: ['16:9', '9:16', '1:1'],
   },
 ];
 
-export const DEFAULT_VIDEO_ID = 'minimax/video-01';
+export const DEFAULT_VIDEO_KEY = 'video-fast';

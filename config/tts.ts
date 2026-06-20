@@ -1,27 +1,20 @@
 import { TTSModel } from './types';
 
-const OPENAI_VOICES = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer', 'ash', 'coral', 'sage']
-  .map((v) => ({ id: v, label: v.charAt(0).toUpperCase() + v.slice(1) }));
-
-// Curated text-to-speech models + their voices.
+// Text-to-speech (provider hidden; users pick a voice).
 export const TTS_MODELS: TTSModel[] = [
   {
-    id: 'gpt-4o-mini-tts', label: 'OpenAI Voice', provider: 'openai',
-    description: 'Natural, expressive speech.', tier: 'free',
-    voices: OPENAI_VOICES,
-  },
-  {
-    id: 'eleven_turbo_v2_5', label: 'ElevenLabs Turbo', provider: 'elevenlabs',
-    description: 'Ultra-realistic voices.', tier: 'pro', badge: 'Pro',
+    key: 'tts-standard', id: 'kokoro', label: 'Standard', provider: 'openrouter',
+    description: 'Natural, lightweight speech.', tier: 'free',
     voices: [
-      { id: '21m00Tcm4TlvDq8ikWAM', label: 'Rachel' },
-      { id: 'pNInz6obpgDQGcFmaJgB', label: 'Adam' },
-      { id: 'ErXwobaYiN019PkySvjV', label: 'Antoni' },
-      { id: 'EXAVITQu4vr4xnSDxMaL', label: 'Bella' },
-      { id: 'TxGEqnHWrfWFTfGW9XjX', label: 'Josh' },
+      { id: 'af_heart', label: 'Heart' },
+      { id: 'af_bella', label: 'Bella' },
+      { id: 'af_sarah', label: 'Sarah' },
+      { id: 'am_adam', label: 'Adam' },
+      { id: 'am_michael', label: 'Michael' },
+      { id: 'bf_emma', label: 'Emma' },
     ],
   },
 ];
 
-export const DEFAULT_TTS_ID = 'gpt-4o-mini-tts';
-export const DEFAULT_TTS_VOICE = 'alloy';
+export const DEFAULT_TTS_KEY = 'tts-standard';
+export const DEFAULT_TTS_VOICE = 'af_heart';

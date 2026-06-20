@@ -45,3 +45,15 @@ alter table public.usage_daily   enable row level security;
 -- (No permissive policies => only the service role key can read/write.)
 
 create index if not exists idx_usage_daily_day on public.usage_daily(day);
+
+-- DEVICE KEYS (App Attest) -------------------------------------------------
+-- One row per attested device key. Stores the Secure Enclave public key and a
+-- monotonic signature counter (replay protection) for assertion verification.
+create table if not exists public.device_keys (
+    key_id      text primary key,
+    user_id     uuid references public.profiles(id) on delete cascade,
+    public_key  text not null,            -- base64-encoded public key
+    sign_count  bigint not null default 0,
+    created_at  timestamptz not null default now()
+);
+alter table public.device_keys enable row level security;
