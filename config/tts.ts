@@ -1,9 +1,10 @@
 import { TTSModel } from './types';
 
 // Text-to-speech (provider hidden; users pick a voice).
+// Kokoro has a ~4k token context window; the speech route chunks long inputs automatically.
 export const TTS_MODELS: TTSModel[] = [
   {
-    key: 'tts-standard', id: 'kokoro', label: 'Standard', provider: 'openrouter',
+    key: 'tts-standard', id: 'hexgrad/kokoro-82m', label: 'Standard', provider: 'openrouter',
     description: 'Natural, lightweight speech.', tier: 'free',
     voices: [
       { id: 'af_heart', label: 'Heart' },

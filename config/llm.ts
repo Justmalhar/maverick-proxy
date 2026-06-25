@@ -18,6 +18,12 @@ export const LLM_MODELS: LLMModel[] = [
     description: 'Maximum reasoning for hard problems.', tier: 'pro', badge: 'Pro',
     reasoning: true, tools: true,
   },
+  // Voice transform: fast, cheap Llama 3.1 8B via Groq — used by the desktop
+  // Maverick Voice app for transcript cleanup and formatting passes.
+  {
+    key: 'voice-transform', id: 'llama-3.1-8b-instant', label: 'Voice Transform', provider: 'groq',
+    description: 'Transcript cleanup and formatting.', tier: 'free',
+  },
 ];
 
 export const DEFAULT_LLM_KEY = 'fast';
