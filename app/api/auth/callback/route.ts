@@ -21,7 +21,8 @@ export async function GET(req: Request): Promise<Response> {
 
   try {
     const { idToken } = await exchangeCode(code);
-    const claims = await verifyGoogleIdToken(idToken);
+    // Web OAuth flow: aud is the web client ID, not the mobile GOOGLE_CLIENT_IDS.
+    const claims = await verifyGoogleIdToken(idToken, process.env.GOOGLE_OAUTH_CLIENT_ID);
     const profile = await upsertProfile(`google:${claims.sub}`, claims.email, claims.name);
     const session = await mintSession(profile.id);
 

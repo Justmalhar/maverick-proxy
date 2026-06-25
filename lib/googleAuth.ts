@@ -9,13 +9,14 @@ export interface GoogleClaims {
 }
 
 /**
- * Verifies a Google identity token (from native Google Sign-In).
- * Audience must be one of the configured OAuth client ids (GOOGLE_CLIENT_IDS,
- * comma-separated — typically the iOS client id).
+ * Verifies a Google identity token.
+ * Pass an explicit `audience` for server-side OAuth flows (GOOGLE_OAUTH_CLIENT_ID).
+ * Falls back to GOOGLE_CLIENT_IDS (comma-separated mobile client ids) when omitted.
  */
-export async function verifyGoogleIdToken(idToken: string): Promise<GoogleClaims> {
-  const audiences = (process.env.GOOGLE_CLIENT_IDS ?? '')
-    .split(',').map((s) => s.trim()).filter(Boolean);
+export async function verifyGoogleIdToken(idToken: string, audience?: string | string[]): Promise<GoogleClaims> {
+  const audiences = audience
+    ? (Array.isArray(audience) ? audience : [audience])
+    : (process.env.GOOGLE_CLIENT_IDS ?? '').split(',').map((s) => s.trim()).filter(Boolean);
   if (!audiences.length) throw new Error('GOOGLE_CLIENT_IDS not configured');
 
   const { payload } = await jwtVerify(idToken, JWKS, {
